@@ -1,0 +1,2 @@
+Do the logic for lease contract.
+after both sale and lease contract are done do the logic for writing it to the contracts.csv
