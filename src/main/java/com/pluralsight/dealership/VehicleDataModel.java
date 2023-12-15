@@ -73,6 +73,35 @@ public class VehicleDataModel {
         }
 
     }
+    public void getByColor() {
+        String query = "{CALL getByColor(?)}";
+        try {
+            System.out.println("Enter the color you would like to search by");
+            String color = scanner.next();
+            scanner.nextLine();
+
+            CallableStatement stmt = connection.prepareCall(query);
+            stmt.setString(1,color);
+
+            ResultSet resultSet = stmt.executeQuery();
+            System.out.println("These are the vehicles that match your search.");
+
+            while (resultSet.next()) {
+                System.out.printf("%d - %s - %s -%s\n",
+                        //show the vehicles that come back from the rs change below
+                        //id VIn COLOR MAKE SOLD PRICE
+                        resultSet.getInt("id"),
+                        resultSet.getString("VIN"),
+                        resultSet.getString("Color"),
+                        resultSet.getString("Make"),
+                        resultSet.getDouble("Price"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
     public void getByYearRange() {
         String query = "{CALL getByYearRange(?,?)}";
         try {

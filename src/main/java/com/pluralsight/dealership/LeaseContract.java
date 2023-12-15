@@ -50,6 +50,7 @@ double monthlyPayment;
     }
 
     public void getMonthlyPayment() {
+        //lease fee is totalPrice * 0.07;
         double residualPrice = this.totalPrice / 2;
 
         double moneyFactor = interestRate/2400;

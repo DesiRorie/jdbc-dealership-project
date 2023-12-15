@@ -1,5 +1,9 @@
 package com.pluralsight.dealership;
 
+import org.apache.commons.dbcp2.BasicDataSource;
+
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 
@@ -23,13 +27,28 @@ public class UserInterface {
     }
 
 
-    public void display(){
-        DealershipFileManager dealershipFileManager = new DealershipFileManager();
-        Dealership dealership1 = new Dealership("D & D" , "add", "123");
-        dealershipFileManager.getDealerShip(dealership1);
-        dealership = dealership1;
-        dealership.getAllVehicles();
+    public void display() throws SQLException {
+//        DealershipFileManager dealershipFileManager = new DealershipFileManager();
+//        Dealership dealership1 = new Dealership("D & D" , "add", "123");
+//        dealershipFileManager.getDealerShip(dealership1);
+//        dealership = dealership1;
+//        dealership.getAllVehicles();
 
+        Scanner scanner = new Scanner(System.in);
+        String user = "root";
+        String myPassword = System.getenv("MY_DB_PASSWORD");
+
+        //Creating the datasource to be used throughout the app.
+        BasicDataSource dataSource = new BasicDataSource();
+        dataSource.setUrl("jdbc:mysql://localhost:3306/CarDealershipDatabase");
+        dataSource.setUsername(user);
+        dataSource.setPassword(myPassword);
+        Connection conn = dataSource.getConnection();
+
+        DatabaseModel databaseModel = new DatabaseModel(conn,scanner);
+        VehicleDataModel vehicleDataModel = new VehicleDataModel(conn,scanner);
+        SalesContractDataModel salesContractDataModel =new SalesContractDataModel(conn,scanner);
+        LeaseContractDataModel leaseContractDataModel = new LeaseContractDataModel(conn,scanner);
 
 
         do {
@@ -52,216 +71,70 @@ public class UserInterface {
             choseOption = scanner.nextInt();
 
 
-            switch (choseOption){
-                case 1:{
-                    processGetByPriceRequest();
+            switch (choseOption) {
+                case 1: {
+                    vehicleDataModel.getByPriceRange();
                     break;
                 }
-                case 2:{
-                    String chosenMakeModel;
-                    System.out.println("What is the make/model?");
-                    chosenMakeModel = scanner.next();
-                    scanner.nextLine();
-                    dealership.getVehiclesByMakeModel(chosenMakeModel);
+                case 2: {
+                    vehicleDataModel.getByMakeOrModel();
+
                     break;
 
                 }
-                case 3:{
-                    int minYear;
-                    int maxYear;
-                    System.out.println("What is the minimum year?");
-                    minYear = scanner.nextInt();
-
-                    System.out.println("What is the maximum year?");
-                    maxYear = scanner.nextInt();
-
-                    dealership.getVehicleYear(minYear,minYear);
+                case 3: {
+                    vehicleDataModel.getByYearRange();
                     break;
 
                 }
-                case 4:{
-                    String chosenColor;
-                    System.out.println("What color to filter by?");
-                    chosenColor = scanner.next();
+                case 4: {
+                    vehicleDataModel.getByColor();
 
-                    dealership.getVehiclesByColor(chosenColor);
                     break;
                 }
-                case 5:{
-                    int chosenMin;
-                    int chosenMax;
-                    System.out.println("What's the minimum amount of mileage?");
-                    chosenMin = scanner.nextInt();
-
-                    System.out.println("What's the maximum amount of mileage?");
-                    chosenMax = scanner.nextInt();
-
-
-                    dealership.getVehiclesByMileage(chosenMin,chosenMax);
+                case 5: {
+                    vehicleDataModel.getByMileageRange();
                     break;
                 }
-                case 6:{
-                    String chosenVehicleType;
-                    System.out.println("Whats your chosen vehicle type?");
-                    chosenVehicleType = scanner.next();
-                    dealership.getVehiclesType(chosenVehicleType);
+                case 6: {
+                    vehicleDataModel.getByCarType();
                     break;
 
                 }
-                case 7:{
+                case 7: {
                     processGetAllVehicles();
                     break;
 
                 }
-                case 8:{
-                    int vin;
-                    int year;
-                    String make;
-                    String model;
-                    String vehicleType;
-                    String color;
-                    int odometer;
-                    double price;
-
-                    System.out.println("What is the vin");
-                    vin = scanner.nextInt();
-
-                    System.out.println("What is the year of the vehicle?");
-                    year = scanner.nextInt();
-
-                    System.out.println("Whats is the make?");
-                    make = scanner.next();
-
-                    System.out.println("What is the model?");
-                    model = scanner.next();
-
-                    System.out.println("What is the vehicle type?");
-                    vehicleType = scanner.next();
-
-                    System.out.println("What is the color?");
-                    color = scanner.next();
-
-                    System.out.println("What is the current milage?");
-                    odometer = scanner.nextInt();
-
-                    System.out.println("Whats is the price?");
-                    price = scanner.nextInt();
-
-
-                    Vehicle newVehicle = new Vehicle(vin,year,make,model,vehicleType,color,odometer,price);
-                    dealership.addVehicle(newVehicle);
-                    dealership.toString();
+                case 8: {
+                    databaseModel.addVehicle();
                 }
-                case 9:{
-                    int chosenVinRemoval;
-                    System.out.println("What is the VIN of the vehicle?");
-                    chosenVinRemoval = scanner.nextInt();
-
-
-                    for (Vehicle vehicle: dealership.inventory) {
-                        if (vehicle.vin == chosenVinRemoval){
-                            dealership.inventory.remove(vehicle);
-                            break;
-
-                        }
-
-                    }
+                case 9: {
+                    databaseModel.removeVehicle();
                     break;
                 }
-                case 10:{
-                    int chosenPurchaseVin;
-                    int isFinancingVehicleNum;
-                    boolean isFinancingVehicle;
-                    String date;
-                    String customerName;
-                    String customerEmail;
+                case 10: {
+                    salesContractDataModel.addSale();
 
 
-
-
-                    System.out.println("Enter the VIN of the vehicle you want to purchase");
-                    chosenPurchaseVin = scanner.nextInt();
-                    for (Vehicle vehicle: dealership.inventory) {
-                        if (vehicle.vin == chosenPurchaseVin){
-
-                            System.out.println("Its Available!");
-                            System.out.println("Will you be financing?");
-                            System.out.println("1) YES");
-                            System.out.println("2) NO");
-                            isFinancingVehicleNum = scanner.nextInt();
-
-                            if (isFinancingVehicleNum == 1){
-                                isFinancingVehicle = true;
-                            } else {
-                                isFinancingVehicle = false;
-                            }
-//                            String date, String customerName, String customerEmail, String vehicleSold, double totalPrice, double monthlyPayment, double salesTaxAmount, double recordingFee, double processingFee, boolean isFinancing
-                            System.out.println("What is the date?");
-                            date = scanner.next();
-                            System.out.println("What is your name?");
-                            customerName = scanner.next();
-                            System.out.println("What is your email");
-                            customerEmail = scanner.next();
-
-
-
-                            SalesContract salesContract = new SalesContract(date,customerName,customerEmail,vehicle.make,vehicle.price,0,isFinancingVehicle);
-                            dealership.inventory.remove(vehicle);
-                            com.pluralsight.dealership.ContractFileManager.writeSalesContract(salesContract);
-
-
-
-                            break;
-                        }
-
-                    }
                     break;
 
+
                 }
-                case 11:{
-                    int chosenLeaseVin;
+                case 11: {
+                    leaseContractDataModel.addLease();
 
-                    String date;
-                    String customerName;
-                    String customerEmail;
-
-
-
-
-                    System.out.println("Enter the VIN of the vehicle you want to purchase");
-                    chosenLeaseVin= scanner.nextInt();
-                    for (Vehicle vehicle: dealership.inventory) {
-                        if (vehicle.vin == chosenLeaseVin){
-
-                            System.out.println("Its Available!");
-
-//                            String date, String customerName, String customerEmail, String vehicleSold, double totalPrice, double monthlyPayment, double salesTaxAmount, double recordingFee, double processingFee, boolean isFinancing
-                            System.out.println("What is the date?");
-                            date = scanner.next();
-                            System.out.println("What is your name?");
-                            customerName = scanner.next();
-                            System.out.println("What is your email");
-                            customerEmail = scanner.next();
-
-
-
-LeaseContract leaseContract = new LeaseContract(date,customerName,customerEmail, vehicle.make,vehicle.price,0,0 ,0);
-                            dealership.inventory.remove(vehicle);
-                            com.pluralsight.dealership.ContractFileManager.writeLeaseContract(leaseContract);
-
-
-
-                            break;
-                        }
-
-                    }
                     break;
-
-                }
-                case 99:{
                 }
 
+                case 99: {
+                    System.exit(0);
+                    break;
+                }
             }
+
+
+
 
         } while (choseOption != 99);
     }
