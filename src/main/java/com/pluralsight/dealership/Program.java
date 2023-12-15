@@ -23,8 +23,15 @@ public class Program {
 
         DealershipDataModel dealershipDataModel = new DealershipDataModel(conn);
         VehicleDataModel vehicleDataModel = new VehicleDataModel(conn,scanner);
-        vehicleDataModel.getByPriceRange();
+////        vehicleDataModel.getByPriceRange();
 //        UserInterface uI = new UserInterface();
+//vehicleDataModel.getByYearRange();
+
+//vehicleDataModel.getByMileageRange()
+;
+vehicleDataModel.getByCarType();
+
+
 //        uI.display();
     }
 }
