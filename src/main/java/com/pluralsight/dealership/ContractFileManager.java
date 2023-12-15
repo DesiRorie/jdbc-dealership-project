@@ -1,7 +1,9 @@
-package com.yearup.dealership;
+package com.pluralsight.dealership;
 
-import java.io.*;
-import java.util.function.DoublePredicate;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
 
 public class ContractFileManager {
     public ContractFileManager() {

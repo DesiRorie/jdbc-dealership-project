@@ -1,4 +1,4 @@
-package com.yearup.dealership;
+package com.pluralsight.dealership;
 
 import java.util.Scanner;
 
@@ -207,7 +207,7 @@ public class UserInterface {
 
                             SalesContract salesContract = new SalesContract(date,customerName,customerEmail,vehicle.make,vehicle.price,0,isFinancingVehicle);
                             dealership.inventory.remove(vehicle);
-                            com.yearup.dealership.ContractFileManager.writeSalesContract(salesContract);
+                            com.pluralsight.dealership.ContractFileManager.writeSalesContract(salesContract);
 
 
 
@@ -247,7 +247,7 @@ public class UserInterface {
 
 LeaseContract leaseContract = new LeaseContract(date,customerName,customerEmail, vehicle.make,vehicle.price,0,0 ,0);
                             dealership.inventory.remove(vehicle);
-                            com.yearup.dealership.ContractFileManager.writeLeaseContract(leaseContract);
+                            com.pluralsight.dealership.ContractFileManager.writeLeaseContract(leaseContract);
 
 
 

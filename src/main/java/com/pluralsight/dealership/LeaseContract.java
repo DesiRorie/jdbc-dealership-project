@@ -1,6 +1,7 @@
-package com.yearup.dealership;
+package com.pluralsight.dealership;
 
 public class LeaseContract extends Contract {
+    int id;
     String contractType;
     double expectedEndingValue; // 50% of the original price;
     double leaseFee; //7% of the original price;

@@ -1,9 +1,10 @@
-package com.yearup.dealership;
+package com.pluralsight.dealership;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Dealership {
+    int id;
     String name;
     String address;
     String phone;

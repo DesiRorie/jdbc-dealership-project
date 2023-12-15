@@ -1,4 +1,4 @@
-package com.yearup.dealership;
+package com.pluralsight.dealership;
 
 public abstract class Contract {
     String date;

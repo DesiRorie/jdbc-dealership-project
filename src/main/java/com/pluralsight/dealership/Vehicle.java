@@ -1,6 +1,7 @@
-package com.yearup.dealership;
+package com.pluralsight.dealership;
 
 public class Vehicle {
+    int id;
     int vin;
     int year;
     String make;
